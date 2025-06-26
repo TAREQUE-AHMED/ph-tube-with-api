@@ -180,22 +180,72 @@
 
 //load all button
 
-function loadALlCategory(){
+function loadAllCategories(){
 fetch('https://openapi.programming-hero.com/api/phero-tube/categories')
 .then(res=>res.json())
-.then(data=>displayAllCategory(data.categories)
+.then(data=>displayCategories(data.categories)
+)
+}
+const displayCategories=(categories)=>{
 
+    const categoryContainer=document.getElementById('categories-container')
+    for(let cat of categories){
+        const categoryDiv=document.createElement('div')
+        categoryDiv.innerHTML=`
+        <button id="btn-all" class="btn btn-sm  hover:bg-blue-600">
+  ${cat.category}
+</button>
+
+        `
+        categoryContainer.append(categoryDiv)
+
+    }
+}
+loadAllCategories()
+
+
+//display all video 
+
+function loadAllVideos(){
+const url=`https://openapi.programming-hero.com/api/phero-tube/videos`
+fetch(url)
+.then(res=>res.json())
+.then(data=>displayAllVideos(data.videos)
 )
 }
 
-const displayAllCategory=(categories)=>{
-    const categoryContainer=document.getElementById('categories-container')
-    for(let cat of categories){
-        const containerDiv=document.createElement('div')
-        containerDiv.innerHTML=`
-        <button id="btn-${cat.category_id}" onclick='loadCategoryVideos(${cat.category_id})' class="btn btn-sm hover:bg-[#FF1F3D] hover:text-white">${cat.category}</button>
-        `
-        categoryContainer.append(containerDiv);
-    }
+const displayAllVideos=(videos)=>{
+// console.log(videos);
+const ContainerCard=document.getElementById('videos-container')
+videos.forEach(video => {
+    const ContainerDivCard=document.createElement('div');
+    ContainerDivCard.innerHTML=`
+    <div class="card bg-base-100 shadow-sm">
+  <figure>
+    <img class="w-full h-[150px] object-cover"
+      src="${video.thumbnail}"
+      alt="Shoes" />
+  </figure>
+  <div class="flex gap-3 px-0 py-5">
+   <div class="profile">
+
+<div class="avatar">
+  <div class="ring-primary ring-offset-base-100 w-6 rounded-full ring-2 ring-offset-2">
+    <img src="${video.authors[0].profile_picture}" />
+  </div> 
+</div>
+
+   </div>
+   <div class="intro">
+<h2 class="text-sm font-semibold">${video.title}</h2>
+<p class="text-sm text-gray-400 flex gap-1">${video.authors[0].profile_name} <img class="h-5 w-5" src="https://img.icons8.com/?size=96&id=98A4yZTt9abw&format=png" alt=""></p>
+<p class="text-sm text-gray-400">${video.others.views} Views</p>
+   </div>
+  </div>
+</div>
+    `
+    ContainerCard.append(ContainerDivCard)
+});
+
 }
-loadALlCategory();
+
